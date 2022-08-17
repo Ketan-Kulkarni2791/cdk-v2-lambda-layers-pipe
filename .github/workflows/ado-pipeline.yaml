@@ -83,7 +83,7 @@ jobs:
       - name: Install Lambda Layers Requirements
         run: |
           python ${{ env.SCRIPT_DIRECTORY }}/install_lambda_layers_reqs.py
-        working-directory: ${{ env.SRC_DIRECTORY }}
+        working-directory: ${{ env.SCRIPT_DIRECTORY }}
 
       - name: CDK Synth
         run: cdk synth
