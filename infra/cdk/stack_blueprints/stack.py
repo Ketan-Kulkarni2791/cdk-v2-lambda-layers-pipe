@@ -29,6 +29,14 @@ class MainProjectStack(aws_cdk.Stack):
             config=config,
             env=env
         )
+        
+        # Infra for Lambda function creation.
+        lambdas = MainProjectStack.create_lambda_functions(
+            stack=stack,
+            config=config,
+            env=env,
+            layer=layers
+        )
     
         
     @staticmethod
@@ -61,3 +69,80 @@ class MainProjectStack(aws_cdk.Stack):
             ]
         )
         return layers
+    
+    
+    @staticmethod
+    def create_lambda_functions(
+        stack: aws_cdk.Stack,
+        config: dict,
+        env: str,
+        layer: Dict[str, _lambda.LayerVersion] = None) -> Dict[str, _lambda.Function]:
+        """Create placeholder lambda function and roles."""
+        
+        lambdas = {}
+        
+        # Lambda using Pandas
+        pandas_lambdas_policy = IAMConstruct.create_managed_policy(
+            stack=stack,
+            env=env,
+            config=config,
+            policy_name="pandas_lambda",
+            statements=[
+                LambdaConstruct.get_cloudwatch_policy(
+                    config['global']['pandas_lambdaLogsArn']
+                )
+            ]
+        )
+        pandas_lambdas_role = IAMConstruct.create_role(
+            stack=stack,
+            env=env,
+            config=config,
+            role_name="pandas_lambdas",
+            assumed_by=["lambda"]   
+        )
+        pandas_lambdas_role.add_managed_policy(pandas_lambdas_policy)
+        
+        lambdas["pandas_lambda"] = LambdaConstruct.create_lambda(
+            stack=stack,
+            env=env,
+            config=config,
+            lambda_name="pandas_lambda",
+            role=pandas_lambdas_role,
+            duration=aws_cdk.Duration.minutes(15),
+            layer=[layer["requirement_layer"]],
+            memory_size=3008
+        )
+        
+        # Lambda using psycopg2
+        psycopg2_lambda_policy = IAMConstruct.create_managed_policy(
+            stack=stack,
+            env=env,
+            config=config,
+            policy_name="psycopg2_lambda",
+            statements=[
+                LambdaConstruct.get_cloudwatch_policy(
+                    config['global']['psycopg2_lambdaLogsArn']
+                )
+            ]
+        )
+        psycopg2_lambdas_role = IAMConstruct.create_role(
+            stack=stack,
+            env=env,
+            config=config,
+            role_name="psycopg2_lambdas",
+            assumed_by=["lambda"]   
+        )
+        psycopg2_lambdas_role.add_managed_policy(psycopg2_lambda_policy)
+        
+        lambdas["psycopg2_lambda"] = LambdaConstruct.create_lambda(
+            stack=stack,
+            env=env,
+            config=config,
+            lambda_name="psycopg2_lambda",
+            role=psycopg2_lambdas_role,
+            duration=aws_cdk.Duration.minutes(15),
+            layer=[layer["requirement_layer_psycopg2"]],
+            memory_size=3008
+        )
+        
+        return lambdas
