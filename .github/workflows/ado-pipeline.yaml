@@ -42,6 +42,7 @@ jobs:
       id-token: write
     env:
       BASE_DIRECTORY: "infra/cdk"
+      SCRIPT_DIRECTORY: "infra/scripts"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -77,6 +78,10 @@ jobs:
         run: |
           pip install -r requirements.txt
         working-directory: ${{ env.BASE_DIRECTORY }}
+
+      - name: Install Lambda Layers Requirements
+        run: |
+          python ${{ env.SCRIPT_DIRECTORY }}/install_lambda_layers_reqs.py
 
       - name: CDK Synth
         run: cdk synth
