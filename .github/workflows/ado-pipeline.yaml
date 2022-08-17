@@ -43,6 +43,7 @@ jobs:
     env:
       BASE_DIRECTORY: "infra/cdk"
       SCRIPT_DIRECTORY: "infra/scripts"
+      SRC_DIRECTORY: "src"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -82,6 +83,7 @@ jobs:
       - name: Install Lambda Layers Requirements
         run: |
           python ${{ env.SCRIPT_DIRECTORY }}/install_lambda_layers_reqs.py
+        working-directory: ${{ env.SRC_DIRECTORY }}
 
       - name: CDK Synth
         run: cdk synth
