@@ -4,6 +4,11 @@ from constructs import Construct
 import aws_cdk.aws_lambda as _lambda
 from typing import Dict, Any
 
+from .lambda_layer_construct import LambdaLayerConstruct
+from .iam_construct import IAMConstruct
+from .lambda_construct import LambdaConstruct
+
+
 class MainProjectStack(aws_cdk.Stack):
     """Build the app stacks and its resources."""
     def __init__(self, env_var: str, scope: Construct, 
@@ -42,7 +47,7 @@ class MainProjectStack(aws_cdk.Stack):
             config=config,
             layer_name="requirement_layer",
             compatible_runtimes=[
-                aws_lambda.Runtime.PYTHON_3_8, aws_lambda.Runtime.PYTHON_3_9
+                _lambda.Runtime.PYTHON_3_8, _lambda.Runtime.PYTHON_3_9
             ]
         )
         # requirement-layer-psycopg2 ---------------------------------------------------
@@ -52,7 +57,7 @@ class MainProjectStack(aws_cdk.Stack):
             config=config,
             layer_name="requirement_layer_psycopg2",
             compatible_runtimes=[
-                aws_lambda.Runtime.PYTHON_3_8, aws_lambda.Runtime.PYTHON_3_9
+                _lambda.Runtime.PYTHON_3_8, _lambda.Runtime.PYTHON_3_9
             ]
         )
         return layers
