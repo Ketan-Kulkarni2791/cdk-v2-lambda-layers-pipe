@@ -1,6 +1,7 @@
 """Main python file_key for adding resources to the application stack."""
 import aws_cdk
 from constructs import Construct
+import aws_cdk.aws_lambda as _lambda
 from typing import Dict, Any
 
 class MainProjectStack(aws_cdk.Stack):
@@ -16,4 +17,42 @@ class MainProjectStack(aws_cdk.Stack):
     @staticmethod
     def create_stack(stack: aws_cdk.Stack, env: str, config: dict) -> None:
         """Create and add the resources to the application stack"""
-        pass
+        
+        # Infra for Lambda Layers
+        layers = MainProjectStack.create_layers_for_lambdas(
+            stack=stack,
+            config=config,
+            env=env
+        )
+    
+        
+    @staticmethod
+    def create_layers_for_lambdas(
+        stack: aws_cdk.Stack,
+        config: dict,
+        env: str
+    ) -> Dict[str, _lambda.LayerVersion]:
+        """Method to create layers."""
+        
+        layers = {}
+        # requirement-layer-pandas ---------------------------------------------------
+        layers["requirement_layer"] = LambdaLayerConstruct.create_lambda_layer(
+            stack=stack,
+            env=env,
+            config=config,
+            layer_name="requirement_layer",
+            compatible_runtimes=[
+                aws_lambda.Runtime.PYTHON_3_8, aws_lambda.Runtime.PYTHON_3_9
+            ]
+        )
+        # requirement-layer-psycopg2 ---------------------------------------------------
+        layers["requirement_layer_psycopg2"] = LambdaLayerConstruct.create_lambda_layer(
+            stack=stack,
+            env=env,
+            config=config,
+            layer_name="requirement_layer_psycopg2",
+            compatible_runtimes=[
+                aws_lambda.Runtime.PYTHON_3_8, aws_lambda.Runtime.PYTHON_3_9
+            ]
+        )
+        return layers
