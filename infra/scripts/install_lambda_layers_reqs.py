@@ -31,8 +31,10 @@ def get_layer_directories(top_level_dir: bytes) -> List[AnyStr]:
 
 def create_zip_for_layers(layer_dir: bytes) -> None:
     """Create zip files for layers."""
+    print(f"-------------- layer_dir : {layer_dir}")
     filename = str(layer_dir)
     filename = filename.rsplit("/", 1)[-1]
+    print(f"-------------- filename : {filename}")
     install_requirements(layer_dir)
     logging.info("Creating zip files for %s", filename)
     subprocess.run(f"zip --quiet -r9 ../{filename}.zip ./*", shell=False, check=True)
