@@ -54,3 +54,18 @@ class LambdaConstruct:
         handler =  config['global'][f"{lambda_name}Hndlr"]
         function_id = f"{config['global']['app-name']}-{lambda_name}-Id"
         function_name = f"{config['global']['app-name']}-{lambda_name}"
+        
+    
+    @staticmethod
+    def get_cloudwatch_policy(lambda_logs_arn: str) -> iam.PolicyStatement:
+        """Returns policy statement for creating logs."""
+        policy_statement = iam.PolicyStatement()
+        policy_statement.effect = iam.Effect.ALLOW
+        policy_statement.add_actions("cloudwatch:PutMetricData")
+        policy_statement.add_actions("logs:CreateLogGroup")
+        policy_statement.add_actions("logs:CreateLogStream")
+        policy_statement.add_actions("logs:GetQueryResults")
+        policy_statement.add_actions("logs:PutLogEvents")
+        policy_statement.add_actions("logs:StartQuery")
+        policy_statement.add_resources(lambda_logs_arn)
+        return policy_statement
