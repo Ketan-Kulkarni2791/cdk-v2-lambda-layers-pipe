@@ -55,5 +55,8 @@ env.bak/
 venv.bak/
 
 cdk.out/*
+.vscode
+.idea
+src/Layer/requirement_layer.zip
 
 /site
