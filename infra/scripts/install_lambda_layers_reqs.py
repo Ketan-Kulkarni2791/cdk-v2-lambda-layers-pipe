@@ -39,8 +39,8 @@ def create_zip_for_layers(layer_dir: bytes) -> None:
     logging.info("Creating zip files for %s", filename)
     subprocess.run(f"zip --quiet -r9 ../{filename}.zip ./*", shell=True, check=True)
     # shutil.make_archive(base_name="requirements", format="zip", root_dir=filename, base_dir='python')
-    logging.info("Deleting raw layer directory: %s", layer_dir)
-    shutil.rmtree(layer_dir)
+    # logging.info("Deleting raw layer directory: %s", layer_dir)
+    # shutil.rmtree(layer_dir)
     
     
 def install_requirements(path: bytes) -> None:
