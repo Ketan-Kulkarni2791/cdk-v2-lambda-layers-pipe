@@ -80,9 +80,9 @@ jobs:
           pip install -r requirements.txt
         working-directory: ${{ env.BASE_DIRECTORY }}
 
-      - name: Install Lambda Layers Requirements
-        run: |
-          python ${{ env.SCRIPT_DIRECTORY }}/install_lambda_layers_reqs.py
+      # - name: Install Lambda Layers Requirements
+      #   run: |
+      #     python ${{ env.SCRIPT_DIRECTORY }}/install_lambda_layers_reqs.py
 
       - name: CDK Synth
         run: cdk synth
