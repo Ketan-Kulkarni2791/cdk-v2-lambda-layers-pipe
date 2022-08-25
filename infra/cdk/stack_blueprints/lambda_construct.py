@@ -59,7 +59,7 @@ class LambdaConstruct:
             "function_name": function_name,
             "code": _lambda.Code.from_asset(path=lambda_path),
             "handler": handler,
-            "runtime": _lambda.Runtime.PYTHON_3_8,
+            "runtime": _lambda.Runtime.PYTHON_3_6,
             "role": role,
             "environment": env_vars,
             "timeout": duration,
