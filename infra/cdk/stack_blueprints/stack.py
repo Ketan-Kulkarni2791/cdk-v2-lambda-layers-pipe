@@ -55,7 +55,7 @@ class MainProjectStack(aws_cdk.Stack):
             config=config,
             layer_name="requirement_layer",
             compatible_runtimes=[
-                _lambda.Runtime.PYTHON_3_8, _lambda.Runtime.PYTHON_3_9
+                _lambda.Runtime.PYTHON_3_6, _lambda.Runtime.PYTHON_3_7
             ]
         )
         # requirement-layer-psycopg2 ---------------------------------------------------
