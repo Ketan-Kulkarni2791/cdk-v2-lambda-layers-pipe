@@ -54,6 +54,19 @@ class LambdaConstruct:
         handler =  config['global'][f"{lambda_name}Hndlr"]
         function_id = f"{config['global']['app-name']}-{lambda_name}-Id"
         function_name = f"{config['global']['app-name']}-{lambda_name}"
+
+        dict_props = {
+            "function_name": function_name,
+            "code": _lambda.Code.from_asset(path=lambda_path),
+            "handler": handler,
+            "runtime": _lambda.Runtime.PYTHON_3_8,
+            "role": role,
+            "environment": env_vars,
+            "timeout": duration,
+            "log_retention": _logs.RetentionDays.THREE_MONTHS
+        }
+
+        return _lambda.Function(scope=stack, id=function_id, **dict_props)
         
     
     @staticmethod
