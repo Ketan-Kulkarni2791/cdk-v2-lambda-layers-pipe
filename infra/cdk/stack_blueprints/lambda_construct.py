@@ -65,6 +65,8 @@ class LambdaConstruct:
             "timeout": duration,
             "log_retention": _logs.RetentionDays.THREE_MONTHS
         }
+        if layer:
+            dict_props['layers'] = layer
 
         return _lambda.Function(scope=stack, id=function_id, **dict_props)
         
